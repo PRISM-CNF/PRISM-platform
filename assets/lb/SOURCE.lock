@@ -1,0 +1,19 @@
+generated_by=./bin/nsm-ovs-lab sync-lb-assets
+
+upstream[0].label=lb
+upstream[0].repo_url=git@github.com:NSM-OVS/nse-ovs-lb.git
+upstream[0].mode=local-worktree
+upstream[0].origin=git@github.com:NSM-OVS/nse-ovs-lb.git
+upstream[0].branch=feat/lb-v1
+upstream[0].commit=5b22dac9916f66b27efcd425869fb7913e04b828
+
+synced_paths[0]=nse-ovs-lb/k8s/00-namespace.yaml -> assets/lb/k8s/00-namespace.yaml
+synced_paths[1]=nse-ovs-lb/k8s/10-networkservice.yaml -> assets/lb/k8s/10-networkservice.yaml
+synced_paths[2]=nse-ovs-lb/k8s/15-lb-rules.yaml -> assets/lb/k8s/15-lb-rules.yaml
+synced_paths[3]=nse-ovs-lb/k8s/20-nse-ovs-lb.yaml -> assets/lb/k8s/20-nse-ovs-lb.yaml
+synced_paths[4]=nse-ovs-lb/k8s/30-nse-ovs-server.yaml -> assets/lb/k8s/30-nse-ovs-server.yaml
+synced_paths[5]=nse-ovs-lb/k8s/40-nsc-ovs-client.yaml -> assets/lb/k8s/40-nsc-ovs-client.yaml
+synced_paths[6]=nse-ovs-lb/k8s/kustomization.yaml -> assets/lb/k8s/kustomization.yaml
+synced_paths[7]=nse-ovs-lb/scripts/verify_same_node_chain.sh -> assets/lb/verify/verify_same_node_chain.sh
+
+patched_files[0]=15-lb-rules.yaml via render-time service-derived VIP/backend rewrite

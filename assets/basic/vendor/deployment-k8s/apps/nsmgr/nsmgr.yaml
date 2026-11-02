@@ -1,0 +1,126 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nsmgr
+  labels:
+    app: nsmgr
+spec:
+  selector:
+    matchLabels:
+      app: nsmgr
+  template:
+    metadata:
+      labels:
+        app: nsmgr
+        "spiffe.io/spiffe-id": "true"
+    spec:
+      serviceAccount: nsmgr-sa
+      containers:
+        - image: ghcr.io/networkservicemesh/ci/cmd-nsmgr:c4c5dfa
+          imagePullPolicy: IfNotPresent
+          name: nsmgr
+          ports:
+            - containerPort: 5001
+              hostPort: 5001
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: NSM_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSM_LOG_LEVEL
+              value: TRACE
+            - name: NSM_PPROF_ENABLED
+              value: "true"
+            - name: NSM_PPROF_LISTEN_ON
+              value: "localhost:6060"
+            - name: NSM_REGISTRY_URL
+              value: "registry:5002"
+            #            - name: DLV_LISTEN_NSMGR
+            #              value: :40000
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: NSM_LISTEN_ON
+              value: unix:///var/lib/networkservicemesh/nsm.io.sock,tcp://$(POD_IP):5001
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
+            - name: exclude-prefixes-volume
+              mountPath: /var/lib/networkservicemesh/config/
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 200m
+            limits:
+              memory: 200Mi
+              cpu: 400m
+          readinessProbe:
+            exec:
+              command:
+                [
+                  "/bin/grpc-health-probe",
+                  "-spiffe",
+                  "-addr=unix:///var/lib/networkservicemesh/nsm.io.sock",
+                ]
+            failureThreshold: 120
+            initialDelaySeconds: 1
+            periodSeconds: 1
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            exec:
+              command:
+                [
+                  "/bin/grpc-health-probe",
+                  "-spiffe",
+                  "-addr=unix:///var/lib/networkservicemesh/nsm.io.sock",
+                ]
+            failureThreshold: 25
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          startupProbe:
+            exec:
+              command:
+                [
+                  "/bin/grpc-health-probe",
+                  "-spiffe",
+                  "-addr=unix:///var/lib/networkservicemesh/nsm.io.sock",
+                ]
+            failureThreshold: 25
+            periodSeconds: 5
+        - image: ghcr.io/networkservicemesh/ci/cmd-exclude-prefixes-k8s:b88249f
+          imagePullPolicy: IfNotPresent
+          name: exclude-prefixes
+          env:
+            - name: NSM_LOG_LEVEL
+              value: TRACE
+          volumeMounts:
+            - name: exclude-prefixes-volume
+              mountPath: /var/lib/networkservicemesh/config/
+          resources:
+            limits:
+              memory: 40Mi
+              cpu: 75m
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate
+        - name: exclude-prefixes-volume
+          emptyDir: {}

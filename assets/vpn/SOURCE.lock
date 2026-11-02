@@ -1,0 +1,19 @@
+generated_by=./bin/nsm-ovs-lab sync-vpn-assets
+
+upstream[0].label=vpn
+upstream[0].repo_url=git@github.com:NSM-OVS/nse-ovs-vpn.git
+upstream[0].mode=local-worktree
+upstream[0].origin=git@github.com:NSM-OVS/nse-ovs-vpn.git
+upstream[0].branch=main
+upstream[0].commit=4b91d413d20e358ed3c657ad72baad524025ad91
+
+synced_paths[0]=nse-ovs-vpn/k8s/00-namespace.yaml -> assets/vpn/k8s/00-namespace.yaml
+synced_paths[1]=nse-ovs-vpn/k8s/05-vpn-secrets.yaml -> assets/vpn/k8s/05-vpn-secrets.yaml
+synced_paths[2]=nse-ovs-vpn/k8s/10-networkservice.yaml -> assets/vpn/k8s/10-networkservice.yaml
+synced_paths[3]=nse-ovs-vpn/k8s/20-nse-ovs-vpn-encrypt.yaml -> assets/vpn/k8s/20-nse-ovs-vpn-encrypt.yaml
+synced_paths[4]=nse-ovs-vpn/k8s/21-nse-ovs-vpn-decrypt.yaml -> assets/vpn/k8s/25-nse-ovs-vpn-decrypt.yaml
+synced_paths[5]=nse-ovs-vpn/k8s/30-nse-ovs-server.yaml -> assets/vpn/k8s/30-nse-ovs-server.yaml
+synced_paths[6]=nse-ovs-vpn/k8s/40-nsc-ovs-client.yaml -> assets/vpn/k8s/40-nsc-ovs-client.yaml
+synced_paths[7]=nse-ovs-vpn/k8s/kustomization.yaml -> assets/vpn/k8s/kustomization.yaml (rewritten for decrypt file ordering)
+synced_paths[8]=nse-ovs-vpn/scripts/verify_same_node_chain.sh -> assets/vpn/verify/verify_same_node_chain.sh
+synced_paths[9]=nse-ovs-vpn/scripts/check_vpn_cleanup.sh -> assets/vpn/verify/check_vpn_cleanup.sh

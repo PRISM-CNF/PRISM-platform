@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: forwarder-ovs
+spec:
+  template:
+    spec:
+      containers:
+        - name: forwarder-ovs
+          env:
+            - $patch: delete
+              name: NSM_SRIOV_CONFIG_FILE
+          volumeMounts:
+            - $patch: delete
+              mountPath: /host/dev/vfio
+            - name: ovs-runtime
+              mountPath: /run/openvswitch
+      volumes:
+        - $patch: delete
+          name: vfio
+        - name: ovs-runtime
+          hostPath:
+            path: /run/openvswitch
+            type: Directory

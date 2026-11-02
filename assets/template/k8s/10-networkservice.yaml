@@ -1,0 +1,16 @@
+apiVersion: networkservicemesh.io/v1
+kind: NetworkService
+metadata:
+  name: nse-ovs-template
+  namespace: nse-ovs-template
+spec:
+  payload: ETHERNET
+  matches:
+    - source_selector:
+        app: template
+      routes:
+        - destination_selector:
+            app: server
+    - routes:
+        - destination_selector:
+            app: template

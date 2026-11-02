@@ -1,0 +1,19 @@
+generated_by=./bin/nsm-ovs-lab sync-gateway-assets
+
+upstream[0].label=gateway
+upstream[0].repo_url=git@github.com:NSM-OVS/nse-ovs-gateway.git
+upstream[0].mode=local-worktree
+upstream[0].origin=git@github.com:NSM-OVS/nse-ovs-gateway.git
+upstream[0].branch=main
+upstream[0].commit=232833293831d02c10d61b5f90f58595768fee41
+
+synced_paths[0]=nse-ovs-gateway/k8s/00-namespace.yaml -> assets/gateway/k8s/00-namespace.yaml
+synced_paths[1]=nse-ovs-gateway/k8s/10-networkservice.yaml -> assets/gateway/k8s/10-networkservice.yaml
+synced_paths[2]=nse-ovs-gateway/k8s/15-gateway-rules.yaml -> assets/gateway/k8s/15-gateway-rules.yaml
+synced_paths[3]=nse-ovs-gateway/k8s/20-nse-ovs-gateway.yaml -> assets/gateway/k8s/20-nse-ovs-gateway.yaml
+synced_paths[4]=nse-ovs-gateway/k8s/30-nse-ovs-server.yaml -> assets/gateway/k8s/30-nse-ovs-server.yaml
+synced_paths[5]=nse-ovs-gateway/k8s/40-nsc-ovs-client.yaml -> assets/gateway/k8s/40-nsc-ovs-client.yaml
+synced_paths[6]=nse-ovs-gateway/k8s/kustomization.yaml -> assets/gateway/k8s/kustomization.yaml
+synced_paths[7]=nse-ovs-gateway/scripts/verify_same_node_chain.sh -> assets/gateway/verify/verify_same_node_chain.sh
+
+patched_files[0]=none

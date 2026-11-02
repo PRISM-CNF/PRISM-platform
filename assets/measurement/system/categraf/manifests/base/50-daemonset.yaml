@@ -1,0 +1,163 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: categraf-agent
+  namespace: categraf-system
+  labels:
+    app.kubernetes.io/name: categraf-agent
+    app.kubernetes.io/component: system-collector
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: categraf-agent
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: categraf-agent
+        app.kubernetes.io/component: system-collector
+    spec:
+      serviceAccountName: categraf-agent
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      restartPolicy: Always
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+      containers:
+        - name: categraf
+          image: zihaocnic/categraf-k8s:v0.4.36
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TZ
+              value: Asia/Shanghai
+            - name: HOSTNAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: HOSTIP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.hostIP
+            - name: HOST_PROC
+              value: /hostfs/proc
+            - name: HOST_SYS
+              value: /hostfs/sys
+            - name: HOST_MOUNT_PREFIX
+              value: /hostfs
+          ports:
+            - name: http
+              containerPort: 9100
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 6
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 2
+            failureThreshold: 6
+          volumeMounts:
+            - name: categraf-config
+              mountPath: /etc/categraf/conf/config.toml
+              subPath: config.toml
+            - name: input-cpu
+              mountPath: /etc/categraf/conf/input.cpu
+            - name: input-disk
+              mountPath: /etc/categraf/conf/input.disk
+            - name: input-diskio
+              mountPath: /etc/categraf/conf/input.diskio
+            - name: input-kubernetes
+              mountPath: /etc/categraf/conf/input.kubernetes
+            - name: input-prometheus
+              mountPath: /etc/categraf/conf/input.prometheus
+            - name: input-kernel
+              mountPath: /etc/categraf/conf/input.kernel
+            - name: input-kernel-vmstat
+              mountPath: /etc/categraf/conf/input.kernel_vmstat
+            - name: input-linux-sysctl-fs
+              mountPath: /etc/categraf/conf/input.linux_sysctl_fs
+            - name: input-mem
+              mountPath: /etc/categraf/conf/input.mem
+            - name: input-net
+              mountPath: /etc/categraf/conf/input.net
+            - name: input-netstat
+              mountPath: /etc/categraf/conf/input.netstat
+            - name: input-processes
+              mountPath: /etc/categraf/conf/input.processes
+            - name: input-system
+              mountPath: /etc/categraf/conf/input.system
+            - name: host-root-fs
+              mountPath: /hostfs
+              readOnly: true
+            - name: host-utmp
+              mountPath: /var/run/utmp
+              readOnly: true
+      volumes:
+        - name: categraf-config
+          configMap:
+            name: categraf-config
+            items:
+              - key: config.toml
+                path: config.toml
+        - name: input-cpu
+          configMap:
+            name: categraf-input-cpu
+        - name: input-disk
+          configMap:
+            name: categraf-input-disk
+        - name: input-diskio
+          configMap:
+            name: categraf-input-diskio
+        - name: input-kubernetes
+          configMap:
+            name: categraf-input-kubernetes
+        - name: input-prometheus
+          configMap:
+            name: categraf-input-prometheus
+        - name: input-kernel
+          configMap:
+            name: categraf-input-kernel
+        - name: input-kernel-vmstat
+          configMap:
+            name: categraf-input-kernel-vmstat
+        - name: input-linux-sysctl-fs
+          configMap:
+            name: categraf-input-linux-sysctl-fs
+        - name: input-mem
+          configMap:
+            name: categraf-input-mem
+        - name: input-net
+          configMap:
+            name: categraf-input-net
+        - name: input-netstat
+          configMap:
+            name: categraf-input-netstat
+        - name: input-processes
+          configMap:
+            name: categraf-input-processes
+        - name: input-system
+          configMap:
+            name: categraf-input-system
+        - name: host-root-fs
+          hostPath:
+            path: /
+        - name: host-utmp
+          hostPath:
+            path: /var/run/utmp

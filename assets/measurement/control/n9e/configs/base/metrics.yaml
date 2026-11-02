@@ -1,0 +1,4 @@
+zh:
+  system_load1: 1分钟平均负载
+  system_uptime: 系统运行时长
+  go_goroutines: Go 协程数量

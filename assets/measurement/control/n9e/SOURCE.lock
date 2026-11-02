@@ -1,0 +1,17 @@
+generated_by=./bin/nsm-ovs-lab sync-n9e-assets
+
+upstream[0].label=n9e
+upstream[0].repo_url=git@github.com:NSM-OVS/n9e-k8s.git
+upstream[0].mode=local-worktree
+upstream[0].origin=
+upstream[0].branch=main
+upstream[0].commit=9257db7ee576c81a4b1a8ce5d13404fc900d14eb
+
+synced_paths[0]=n9e-k8s/configs/base -> assets/measurement/control/n9e/configs/base
+synced_paths[1]=n9e-k8s/manifests/base -> assets/measurement/control/n9e/manifests/base
+synced_paths[2]=n9e-k8s/scripts/deploy.sh -> assets/measurement/control/n9e/scripts/deploy.sh
+synced_paths[3]=n9e-k8s/scripts/check.sh -> assets/measurement/control/n9e/scripts/check.sh
+synced_paths[4]=n9e-k8s/scripts/cleanup.sh -> assets/measurement/control/n9e/scripts/cleanup.sh
+synced_paths[5]=n9e-k8s/scripts/lib/common.sh -> assets/measurement/control/n9e/scripts/lib/common.sh
+
+patched_files[0]=assets/measurement/control/n9e/scripts/lib/common.sh (TZ default + ISO8601 local log timestamp)

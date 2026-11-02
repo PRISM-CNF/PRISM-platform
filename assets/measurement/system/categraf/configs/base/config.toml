@@ -1,0 +1,29 @@
+[global]
+print_configs = false
+hostname = "$HOSTNAME"
+omit_hostname = false
+precision = "ms"
+interval = 15
+providers = ["local"]
+
+[writer_opt]
+batch = 2000
+chan_size = 10000
+
+[http]
+enable = true
+address = ":9100"
+print_access = false
+run_mode = "release"
+ignore_hostname = false
+agent_host_tag = ""
+ignore_global_labels = false
+
+[heartbeat]
+enable = false
+
+[[writers]]
+url = "http://n9e.n9e-system.svc.cluster.local:17000/prometheus/v1/write"
+timeout = 5000
+dial_timeout = 2500
+max_idle_conns_per_host = 10

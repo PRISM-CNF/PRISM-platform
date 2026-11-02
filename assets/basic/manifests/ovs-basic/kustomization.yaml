@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: nsm-system
+
+resources:
+  - nsm-system-namespace.yaml
+  - ../../vendor/deployment-k8s/apps/nsmgr
+  - ../../vendor/deployment-k8s/apps/registry-k8s
+  - ../../vendor/deployment-k8s/apps/admission-webhook-k8s
+  - ../../vendor/deployment-k8s/apps/forwarder-ovs
+
+patches:
+  - path: patch-forwarder-ovs-kernel-only.yaml
+  - path: patch-forwarder-ovs-exp-nodepool.yaml
+  - path: patch-forwarder-ovs-advertise-ip.yaml
+  - path: patch-nsmgr-exp-nodepool.yaml
+  - path: patch-nsmgr-host-network.yaml
+  - path: patch-registry-exp-nodepool.yaml
+  - path: patch-registry-host-network.yaml
+  - path: patch-admission-webhook-exp-nodepool.yaml
+  - path: patch-admission-webhook-host-network.yaml

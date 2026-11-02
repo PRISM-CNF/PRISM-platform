@@ -1,0 +1,17 @@
+generated_by=./bin/nsm-ovs-lab sync-vm-assets
+
+upstream[0].label=victoriametrics
+upstream[0].repo_url=git@github.com:NSM-OVS/victoriametrics-k8s.git
+upstream[0].mode=local-worktree
+upstream[0].origin=
+upstream[0].branch=main
+upstream[0].commit=30d6a266ad2e6c9642145bd552835897daa2d4aa
+
+synced_paths[0]=victoriametrics-k8s/manifests/base -> assets/measurement/storage/victoriametrics/manifests/base
+synced_paths[1]=victoriametrics-k8s/scripts/deploy.sh -> assets/measurement/storage/victoriametrics/scripts/deploy.sh
+synced_paths[2]=victoriametrics-k8s/scripts/check.sh -> assets/measurement/storage/victoriametrics/scripts/check.sh
+synced_paths[3]=victoriametrics-k8s/scripts/cleanup.sh -> assets/measurement/storage/victoriametrics/scripts/cleanup.sh
+synced_paths[4]=victoriametrics-k8s/scripts/lib/common.sh -> assets/measurement/storage/victoriametrics/scripts/lib/common.sh
+
+patched_files[0]=assets/measurement/storage/victoriametrics/scripts/lib/common.sh (TZ default + ISO8601 local log timestamp)
+patched_files[1]=assets/measurement/storage/victoriametrics/manifests/base/50-statefulset.yaml (inject TZ=Asia/Shanghai)

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: spire-server
+  namespace: spire
+spec:
+  template:
+    metadata:
+      annotations:
+        exp.nsm/basic-spire-datastore: sqlite-v1
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      nodeSelector:
+        kubernetes.io/hostname: nsm-lab-w01
+      tolerations:
+        - key: exp.wpool
+          operator: Equal
+          value: only
+          effect: NoSchedule
+        - key: dedicated
+          operator: Equal
+          value: servicechain
+          effect: NoSchedule

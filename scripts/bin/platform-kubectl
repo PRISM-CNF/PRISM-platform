@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+kubectl_bin="${NSM_OVS_KUBECTL_BIN:-kubectl}"
+declare -a kubectl_args=()
+
+if [[ -n "${KUBECONFIG_PATH:-}" ]]; then
+    kubectl_args+=(--kubeconfig "${KUBECONFIG_PATH}")
+fi
+
+if [[ -n "${KUBECTL_CONTEXT:-}" ]]; then
+    kubectl_args+=(--context "${KUBECTL_CONTEXT}")
+fi
+
+exec "${kubectl_bin}" "${kubectl_args[@]}" "$@"

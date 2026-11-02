@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: n9e
+  namespace: n9e-system
+  labels:
+    app.kubernetes.io/name: n9e
+    app.kubernetes.io/component: center
+    app.kubernetes.io/part-of: n9e-k8s
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: n9e
+      app.kubernetes.io/component: center
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: n9e
+        app.kubernetes.io/component: center
+        app.kubernetes.io/part-of: n9e-k8s
+    spec:
+      containers:
+        - name: n9e
+          image: zihaocnic/n9e-k8s:v8.4.1
+          imagePullPolicy: IfNotPresent
+          command:
+            - /app/n9e
+          args:
+            - configs
+            - /app/etc
+          env:
+            - name: TZ
+              value: Asia/Shanghai
+          ports:
+            - name: http
+              containerPort: 17000
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 12
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 6
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          volumeMounts:
+            - name: n9e-config
+              mountPath: /app/etc
+              readOnly: true
+            - name: n9e-data
+              mountPath: /var/lib/n9e
+      volumes:
+        - name: n9e-config
+          configMap:
+            name: n9e-config
+        - name: n9e-data
+          persistentVolumeClaim:
+            claimName: n9e-data

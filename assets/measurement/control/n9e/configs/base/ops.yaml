@@ -1,0 +1,5 @@
+ops:
+  - name: system
+    cname: 系统信息
+    ops:
+      - "/help/version"

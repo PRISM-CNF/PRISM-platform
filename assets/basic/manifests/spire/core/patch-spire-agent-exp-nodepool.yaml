@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: spire-agent
+  namespace: spire
+spec:
+  template:
+    metadata:
+      annotations:
+        exp.nsm/basic-spire-agent-config: host-endpoint-v1
+    spec:
+      nodeSelector:
+        exp.nsm: "true"
+      tolerations:
+        - key: exp.wpool
+          operator: Equal
+          value: only
+          effect: NoSchedule
+        - key: dedicated
+          operator: Equal
+          value: servicechain
+          effect: NoSchedule

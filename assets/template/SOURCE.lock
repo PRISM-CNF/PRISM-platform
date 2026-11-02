@@ -1,0 +1,13 @@
+generated_by=./bin/nsm-ovs-lab sync-template-assets
+
+upstream[0].label=template
+upstream[0].repo_url=git@github.com:NSM-OVS/nse-ovs-template.git
+upstream[0].mode=local-worktree
+upstream[0].origin=git@github.com:NSM-OVS/nse-ovs-template.git
+upstream[0].branch=main
+upstream[0].commit=ec691fb203feea275d144f120c4afb9c5a551acb
+
+synced_paths[0]=nse-ovs-template/k8s -> assets/template/k8s
+synced_paths[1]=nse-ovs-template/scripts/verify_same_node_chain.sh -> assets/template/verify/verify_same_node_chain.sh
+
+patched_files[0]=none

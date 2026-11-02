@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: spire-server
+  namespace: spire
+spec:
+  volumeClaimTemplates: []
+  template:
+    spec:
+      volumes:
+        - name: spire-data
+          emptyDir: {}

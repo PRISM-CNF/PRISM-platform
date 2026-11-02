@@ -1,0 +1,326 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PLATFORM_REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+# shellcheck source=/dev/null
+source "${PLATFORM_REPO_ROOT}/scripts/lib/log.sh"
+# shellcheck source=/dev/null
+source "${PLATFORM_REPO_ROOT}/scripts/lib/paths.sh"
+
+usage() {
+    cat <<'EOF'
+Usage: ./bin/nsm-ovs-lab <subcommand> [options]
+
+Subcommands:
+  show-config
+  show-cluster-target
+  check-cluster-readiness
+  ensure-basic-repo
+  deploy-basic
+  check-basic
+  cleanup-basic
+  ensure-template-stack-repos
+  show-template-plan
+  show-firewall-plan
+  show-nat-plan
+  show-gateway-plan
+  show-dpi-plan
+  show-lb-plan
+  show-vpn-plan
+  render-template-stack
+  render-firewall-stack
+  render-nat-stack
+  render-gateway-stack
+  render-dpi-stack
+  render-lb-stack
+  render-vpn-stack
+  build-template
+  deploy-template
+  deploy-firewall
+  deploy-nat
+  deploy-gateway
+  deploy-dpi
+  deploy-lb
+  deploy-vpn
+  check-template
+  check-firewall
+  check-nat
+  check-gateway
+  check-dpi
+  check-lb
+  check-vpn
+  cleanup-template
+  cleanup-firewall
+  cleanup-nat
+  cleanup-gateway
+  cleanup-dpi
+  cleanup-lb
+  cleanup-vpn
+  deploy-categraf
+  check-categraf
+  cleanup-categraf
+  deploy-vm
+  check-vm
+  cleanup-vm
+  deploy-n9e
+  check-n9e
+  cleanup-n9e
+  deploy-measurement-stack
+  check-measurement-stack
+  cleanup-measurement-stack
+
+Global options:
+  --cluster-profile <name-or-path>
+  --kubeconfig <path>
+  --context <name>
+  --image-delivery-mode <registry-pull|preload-import>
+  --nsm-root <path>
+  --basic-repo-name <name>
+  --basic-repo-url <url>
+  --deployment-k8s-repo-name <name>
+  --deployment-k8s-repo-url <url>
+  --template-repo-name <name>
+  --template-repo-url <url>
+  --firewall-repo-name <name>
+  --firewall-repo-url <url>
+  --nat-repo-name <name>
+  --nat-repo-url <url>
+  --gateway-repo-name <name>
+  --gateway-repo-url <url>
+  --dpi-repo-name <name>
+  --dpi-repo-url <url>
+  --lb-repo-name <name>
+  --lb-repo-url <url>
+  --vpn-repo-name <name>
+  --vpn-repo-url <url>
+  --lb-steering-mode <auto|legacy-inject>
+  --nat-steering-mode <auto|legacy-inject>
+  --vpn-xnode-mode <disabled|exploratory>
+  --pcm-deployment-mode <in-cluster|host-transition>
+  --client-repo-name <name>
+  --client-repo-url <url>
+  --server-repo-name <name>
+  --server-repo-url <url>
+  --categraf-repo-name <name>
+  --categraf-repo-url <url>
+  --vm-repo-name <name>
+  --vm-repo-url <url>
+  --n9e-repo-name <name>
+  --n9e-repo-url <url>
+  --stack-id <id>
+  --namespace <name>
+  --network-service-name <name>
+  --cidr-prefix <cidr>
+  --vnf-node <name>
+  --client-node <name>
+  --server-node <name>
+  -h, --help
+
+EOF
+}
+
+show_config() {
+    platform_init "$@"
+    platform_require_no_extra_args
+    platform_print_resolved_config
+}
+
+show_cluster_target() {
+    platform_init "$@"
+    platform_require_no_extra_args
+    platform_print_cluster_target
+}
+
+main() {
+    if [[ $# -eq 0 ]]; then
+        usage
+        exit 1
+    fi
+
+    local subcommand=$1
+    shift
+
+    case "${subcommand}" in
+        show-config)
+            show_config "$@"
+            ;;
+        show-cluster-target)
+            show_cluster_target "$@"
+            ;;
+        check-cluster-readiness)
+            exec "${PLATFORM_REPO_ROOT}/scripts/env/check_cluster_readiness.sh" "$@"
+            ;;
+        ensure-basic-repo)
+            exec "${PLATFORM_REPO_ROOT}/scripts/bootstrap/ensure_basic_repo.sh" "$@"
+            ;;
+        deploy-basic)
+            exec "${PLATFORM_REPO_ROOT}/scripts/env/deploy_basic.sh" "$@"
+            ;;
+        check-basic)
+            exec "${PLATFORM_REPO_ROOT}/scripts/env/check_basic_ready.sh" "$@"
+            ;;
+        cleanup-basic)
+            exec "${PLATFORM_REPO_ROOT}/scripts/env/cleanup_basic.sh" "$@"
+            ;;
+        ensure-template-stack-repos)
+            exec "${PLATFORM_REPO_ROOT}/scripts/bootstrap/ensure_template_stack_repos.sh" "$@"
+            ;;
+        show-template-plan)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/show_template_plan.sh" "$@"
+            ;;
+        show-firewall-plan)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/show_firewall_plan.sh" "$@"
+            ;;
+        show-nat-plan)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/show_nat_plan.sh" "$@"
+            ;;
+        show-gateway-plan)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/show_gateway_plan.sh" "$@"
+            ;;
+        show-dpi-plan)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/show_dpi_plan.sh" "$@"
+            ;;
+        show-lb-plan)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/show_lb_plan.sh" "$@"
+            ;;
+        show-vpn-plan)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/show_vpn_plan.sh" "$@"
+            ;;
+        render-template-stack)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/render_template_stack.sh" "$@"
+            ;;
+        render-firewall-stack)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/render_firewall_stack.sh" "$@"
+            ;;
+        render-nat-stack)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/render_nat_stack.sh" "$@"
+            ;;
+        render-gateway-stack)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/render_gateway_stack.sh" "$@"
+            ;;
+        render-dpi-stack)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/render_dpi_stack.sh" "$@"
+            ;;
+        render-lb-stack)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/render_lb_stack.sh" "$@"
+            ;;
+        render-vpn-stack)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/render_vpn_stack.sh" "$@"
+            ;;
+        build-template)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/build_template.sh" "$@"
+            ;;
+        deploy-template)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/deploy_template_chain.sh" "$@"
+            ;;
+        deploy-firewall)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/deploy_firewall_chain.sh" "$@"
+            ;;
+        deploy-nat)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/deploy_nat_chain.sh" "$@"
+            ;;
+        deploy-gateway)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/deploy_gateway_chain.sh" "$@"
+            ;;
+        deploy-dpi)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/deploy_dpi_chain.sh" "$@"
+            ;;
+        deploy-lb)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/deploy_lb_chain.sh" "$@"
+            ;;
+        deploy-vpn)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/deploy_vpn_chain.sh" "$@"
+            ;;
+        check-template)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/check_template_chain.sh" "$@"
+            ;;
+        check-firewall)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/check_firewall_chain.sh" "$@"
+            ;;
+        check-nat)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/check_nat_chain.sh" "$@"
+            ;;
+        check-gateway)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/check_gateway_chain.sh" "$@"
+            ;;
+        check-dpi)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/check_dpi_chain.sh" "$@"
+            ;;
+        check-lb)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/check_lb_chain.sh" "$@"
+            ;;
+        check-vpn)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/check_vpn_chain.sh" "$@"
+            ;;
+        cleanup-template)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/cleanup_template_chain.sh" "$@"
+            ;;
+        cleanup-firewall)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/cleanup_firewall_chain.sh" "$@"
+            ;;
+        cleanup-nat)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/cleanup_nat_chain.sh" "$@"
+            ;;
+        cleanup-gateway)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/cleanup_gateway_chain.sh" "$@"
+            ;;
+        cleanup-dpi)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/cleanup_dpi_chain.sh" "$@"
+            ;;
+        cleanup-lb)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/cleanup_lb_chain.sh" "$@"
+            ;;
+        cleanup-vpn)
+            exec "${PLATFORM_REPO_ROOT}/scripts/services/cleanup_vpn_chain.sh" "$@"
+            ;;
+        deploy-categraf)
+            exec "${PLATFORM_REPO_ROOT}/scripts/measurement/deploy_categraf.sh" "$@"
+            ;;
+        check-categraf)
+            exec "${PLATFORM_REPO_ROOT}/scripts/measurement/check_categraf.sh" "$@"
+            ;;
+        cleanup-categraf)
+            exec "${PLATFORM_REPO_ROOT}/scripts/measurement/cleanup_categraf.sh" "$@"
+            ;;
+        deploy-vm)
+            exec "${PLATFORM_REPO_ROOT}/scripts/measurement/deploy_vm.sh" "$@"
+            ;;
+        check-vm)
+            exec "${PLATFORM_REPO_ROOT}/scripts/measurement/check_vm.sh" "$@"
+            ;;
+        cleanup-vm)
+            exec "${PLATFORM_REPO_ROOT}/scripts/measurement/cleanup_vm.sh" "$@"
+            ;;
+        deploy-n9e)
+            exec "${PLATFORM_REPO_ROOT}/scripts/measurement/deploy_n9e.sh" "$@"
+            ;;
+        check-n9e)
+            exec "${PLATFORM_REPO_ROOT}/scripts/measurement/check_n9e.sh" "$@"
+            ;;
+        cleanup-n9e)
+            exec "${PLATFORM_REPO_ROOT}/scripts/measurement/cleanup_n9e.sh" "$@"
+            ;;
+        deploy-measurement-stack)
+            exec "${PLATFORM_REPO_ROOT}/scripts/measurement/deploy_measurement_stack.sh" "$@"
+            ;;
+        check-measurement-stack)
+            exec "${PLATFORM_REPO_ROOT}/scripts/measurement/check_measurement_stack.sh" "$@"
+            ;;
+        cleanup-measurement-stack)
+            exec "${PLATFORM_REPO_ROOT}/scripts/measurement/cleanup_measurement_stack.sh" "$@"
+            ;;
+        -h|--help|help)
+            usage
+            ;;
+        *)
+            log_error "unknown subcommand: ${subcommand}"
+            usage
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"

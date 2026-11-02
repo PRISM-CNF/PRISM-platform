@@ -1,0 +1,12 @@
+[white_list]
+oom_kill = 1
+pgfault = 0
+pgmajfault = 0
+pgpgin = 0
+pgpgout = 0
+pswpin = 0
+pswpout = 0
+allocstall = 0
+pgscan_direct = 0
+pgscan_kswapd = 0
+

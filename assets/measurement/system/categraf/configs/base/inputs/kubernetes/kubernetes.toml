@@ -1,0 +1,9 @@
+[[instances]]
+url = "https://127.0.0.1:10250"
+gather_system_container_metrics = true
+gather_node_metrics = true
+gather_pod_container_metrics = true
+gather_pod_volume_metrics = true
+gather_pod_network_metrics = true
+use_tls = true
+insecure_skip_verify = true

@@ -1,0 +1,19 @@
+generated_by=./bin/nsm-ovs-lab sync-firewall-assets
+
+upstream[0].label=firewall
+upstream[0].repo_url=git@github.com:NSM-OVS/nse-ovs-firewall.git
+upstream[0].mode=local-worktree
+upstream[0].origin=git@github.com:NSM-OVS/nse-ovs-firewall.git
+upstream[0].branch=feat/firewall-v1
+upstream[0].commit=fc6328ad2337d9b542d06a7a9cdf44e835486053
+
+synced_paths[0]=nse-ovs-firewall/k8s/00-namespace.yaml -> assets/firewall/k8s/00-namespace.yaml
+synced_paths[1]=nse-ovs-firewall/k8s/10-networkservice.yaml -> assets/firewall/k8s/10-networkservice.yaml
+synced_paths[2]=nse-ovs-firewall/k8s/15-firewall-rules.yaml -> assets/firewall/k8s/15-firewall-rules.yaml
+synced_paths[3]=nse-ovs-firewall/k8s/20-nse-ovs-firewall.yaml -> assets/firewall/k8s/20-nse-ovs-firewall.yaml
+synced_paths[4]=nse-ovs-firewall/k8s/30-nse-ovs-server.yaml -> assets/firewall/k8s/30-nse-ovs-server.yaml
+synced_paths[5]=nse-ovs-firewall/k8s/40-nsc-ovs-client.yaml -> assets/firewall/k8s/40-nsc-ovs-client.yaml
+synced_paths[6]=nse-ovs-firewall/k8s/kustomization.yaml -> assets/firewall/k8s/kustomization.yaml
+synced_paths[7]=nse-ovs-firewall/scripts/verify_same_node_chain.sh -> assets/firewall/verify/verify_same_node_chain.sh
+
+patched_files[0]=none

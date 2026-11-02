@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: spire-server
+  namespace: spire
+spec:
+  template:
+    spec:
+      containers:
+        - name: spire-controller-manager
+          readinessProbe:
+            initialDelaySeconds: 15
+            failureThreshold: 6
+            periodSeconds: 10
+            timeoutSeconds: 1
+          livenessProbe:
+            initialDelaySeconds: 60
+            failureThreshold: 6
+            periodSeconds: 10
+            timeoutSeconds: 1

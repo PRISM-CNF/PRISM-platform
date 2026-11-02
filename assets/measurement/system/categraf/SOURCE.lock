@@ -1,0 +1,18 @@
+generated_by=./bin/nsm-ovs-lab sync-categraf-assets
+
+upstream[0].label=categraf
+upstream[0].repo_url=git@github.com:NSM-OVS/categraf-k8s.git
+upstream[0].mode=local-worktree
+upstream[0].origin=
+upstream[0].branch=main
+upstream[0].commit=18667f497ee48ae7f4cf32e462e752965dda24a7
+
+synced_paths[0]=categraf-k8s/configs/base -> assets/measurement/system/categraf/configs/base
+synced_paths[1]=categraf-k8s/manifests/base -> assets/measurement/system/categraf/manifests/base
+synced_paths[2]=categraf-k8s/scripts/deploy.sh -> assets/measurement/system/categraf/scripts/deploy.sh
+synced_paths[3]=categraf-k8s/scripts/check.sh -> assets/measurement/system/categraf/scripts/check.sh
+synced_paths[4]=categraf-k8s/scripts/cleanup.sh -> assets/measurement/system/categraf/scripts/cleanup.sh
+synced_paths[5]=categraf-k8s/scripts/lib/common.sh -> assets/measurement/system/categraf/scripts/lib/common.sh
+
+patched_files[0]=assets/measurement/system/categraf/scripts/lib/common.sh (TZ default + ISO8601 local log timestamp)
+patched_files[1]=assets/measurement/system/categraf/configs/base/config.toml (inject n9e remote write writer)

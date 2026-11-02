@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nse-ovs-template
+  namespace: nse-ovs-template
+  labels:
+    app: nse-ovs-template
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nse-ovs-template
+  template:
+    metadata:
+      labels:
+        app: nse-ovs-template
+        "spiffe.io/spiffe-id": "true"
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: node01
+      tolerations:
+        - key: exp.wpool
+          operator: Equal
+          value: only
+          effect: NoSchedule
+        - key: dedicated
+          operator: Equal
+          value: servicechain
+          effect: NoSchedule
+      containers:
+        - name: nse
+          image: zihaocnic/nse-ovs-template:20260326-79673ea
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          env:
+            - name: SPIFFE_ENDPOINT_SOCKET
+              value: unix:///run/spire/sockets/agent.sock
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NSM_NAME
+              value: "$(POD_NAME)"
+            - name: NSM_SERVICE_NAME
+              value: nse-ovs-template
+            - name: NSM_LABELS
+              value: "app:template"
+            - name: NSM_LOG_LEVEL
+              value: TRACE
+            - name: NSM_CONNECT_TO
+              value: unix:///var/lib/networkservicemesh/nsm.io.sock
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+            - name: nsm-socket
+              mountPath: /var/lib/networkservicemesh
+              readOnly: true
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: nsm-socket
+          hostPath:
+            path: /var/lib/networkservicemesh
+            type: DirectoryOrCreate

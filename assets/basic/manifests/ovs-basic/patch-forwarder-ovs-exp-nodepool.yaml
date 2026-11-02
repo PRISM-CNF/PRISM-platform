@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: forwarder-ovs
+spec:
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - node01
+                      - node02
+                      - nsm-lab-w01
+                      - nsm-lab-w02
+      tolerations:
+        - key: exp.wpool
+          operator: Equal
+          value: only
+          effect: NoSchedule
+        - key: dedicated
+          operator: Equal
+          value: servicechain
+          effect: NoSchedule

@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: spire-agent
+  namespace: spire
+spec:
+  template:
+    spec:
+      initContainers:
+        - $patch: delete
+          name: init

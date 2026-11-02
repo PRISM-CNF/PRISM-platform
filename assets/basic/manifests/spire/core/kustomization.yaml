@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../../vendor/deployment-k8s/examples/spire/single_cluster
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: spire-server
+    namespace: spire
+    behavior: replace
+    files:
+      - server.conf=server.conf
+  - name: spire-agent
+    namespace: spire
+    behavior: replace
+    files:
+      - agent.conf=agent.conf
+
+patches:
+  - path: patch-spire-agent-exp-nodepool.yaml
+  - path: patch-spire-agent-wait-for-it-delete.yaml
+  - path: patch-spire-server-exp-nodepool.yaml
+  - path: patch-spire-server-controller-manager-probes.yaml
+  - path: patch-spire-server-emptydir-data.yaml
+  - path: patch-spire-postgres-deployment-delete.yaml
+  - path: patch-spire-postgres-service-delete.yaml

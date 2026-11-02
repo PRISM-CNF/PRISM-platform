@@ -1,0 +1,19 @@
+generated_by=./bin/nsm-ovs-lab sync-dpi-assets
+
+upstream[0].label=dpi
+upstream[0].repo_url=git@github.com:NSM-OVS/nse-ovs-dpi.git
+upstream[0].mode=local-worktree
+upstream[0].origin=git@github.com:NSM-OVS/nse-ovs-dpi.git
+upstream[0].branch=feat/dpi-v1
+upstream[0].commit=ea0f1b645061f7fa3a320282a35a9197a79dc66f
+
+synced_paths[0]=nse-ovs-dpi/k8s/00-namespace.yaml -> assets/dpi/k8s/00-namespace.yaml
+synced_paths[1]=nse-ovs-dpi/k8s/10-networkservice.yaml -> assets/dpi/k8s/10-networkservice.yaml
+synced_paths[2]=nse-ovs-dpi/k8s/15-dpi-rules.yaml -> assets/dpi/k8s/15-dpi-rules.yaml
+synced_paths[3]=nse-ovs-dpi/k8s/20-nse-ovs-dpi.yaml -> assets/dpi/k8s/20-nse-ovs-dpi.yaml
+synced_paths[4]=nse-ovs-dpi/k8s/30-nse-ovs-server.yaml -> assets/dpi/k8s/30-nse-ovs-server.yaml
+synced_paths[5]=nse-ovs-dpi/k8s/40-nsc-ovs-client.yaml -> assets/dpi/k8s/40-nsc-ovs-client.yaml
+synced_paths[6]=nse-ovs-dpi/k8s/kustomization.yaml -> assets/dpi/k8s/kustomization.yaml
+synced_paths[7]=nse-ovs-dpi/scripts/verify_same_node_chain.sh -> assets/dpi/verify/verify_same_node_chain.sh
+
+patched_files[0]=15-dpi-rules.yaml via render-time CIDR-aware local.rules rewrite

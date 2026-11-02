@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-k8s
+spec:
+  template:
+    spec:
+      nodeSelector:
+        exp.wpool: "true"
+      tolerations:
+        - key: exp.wpool
+          operator: Equal
+          value: only
+          effect: NoSchedule
+        - key: dedicated
+          operator: Equal
+          value: servicechain
+          effect: NoSchedule

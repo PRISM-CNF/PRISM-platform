@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: categraf-system
+  labels:
+    app.kubernetes.io/name: categraf-agent
+    app.kubernetes.io/component: system-collector
